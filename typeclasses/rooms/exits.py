@@ -6,9 +6,9 @@ set and has a single command defined on itself with the same name as its key,
 for allowing Characters to traverse the exit to its destination.
 
 """
-from evennia.objects.objects import DefaultExit
+from typeclasses.objects.objects import ObjectParent
 
-from .objects import ObjectParent
+from evennia.objects.objects import DefaultExit
 
 
 class Exit(ObjectParent, DefaultExit):

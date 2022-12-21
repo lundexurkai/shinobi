@@ -5,9 +5,9 @@ Rooms are simple containers that has no location of their own.
 
 """
 
-from evennia.objects.objects import DefaultRoom
+from typeclasses.objects.objects import ObjectParent
 
-from .objects import ObjectParent
+from evennia.objects.objects import DefaultRoom
 
 
 class Room(ObjectParent, DefaultRoom):
