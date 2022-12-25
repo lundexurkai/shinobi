@@ -1,16 +1,60 @@
 "Lineages backgrounds"
 
-from world.backgrounds.handlers import Background
+from world.backgrounds.backgrounds import Background
 
 
-class AsuraLinege(Background):
-  name = "asura's lineage"
+class AsurasLinege(Background):
+  """
+  You are a decendant of Asura Otsutsuki, the progenitor of the Senju and Uzumaki clans.
+  """
 
-class IndraLinege(Background):
-  name = "indra's lineage"
+  name = "Asura's Lineage"
+  category = Background.Category.Lineage
+  traits = ("bloodline", )
+  
+  prerequisities = {
+    "blocked_traits": ("bloodline", "orphan")
+  }
+  
 
-class HumuraLinege(Background):
-  name = "humura's lineage"
+class IndrasLinege(Background):
+  """
+  You are a decendant of Indra Otsutsuki, the progenitor of the Uchiha clan.
+  """
 
-class KaguyaLinege(Background):
-  name = "kaguya's lineage"
+  name = "Indra's Lineage"
+  category = Background.Category.Lineage
+  traits = ("bloodline", )
+  
+  prerequisities = {
+    "blocked_traits": ("bloodline", "orphan")
+  }
+  
+
+class HamurasLinege(Background):
+  """
+  You are a decendant of Hamura Otsutsuki, the progenitor of the Hyuuga clan.
+  """
+
+  name = "Hamura's Lineage"
+  category = Background.Category.Lineage
+  traits = ("bloodline", )
+  
+  prerequisities = {
+    "blocked_traits": ("bloodline", "orphan")
+  }
+  
+
+class KaguyasLinege(Background):
+  """
+  You are a decendant of Kaguya Otsutsuki, the progenitor of the Kaguya clan.
+  """
+
+  name = "Kaguya's Lineage"
+  category = Background.Category.Lineage
+  traits = ("bloodline", )
+  
+  prerequisities = {
+    "blocked_traits": ("bloodline", "orphan")
+  }
+  

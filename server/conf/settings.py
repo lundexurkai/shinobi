@@ -63,7 +63,8 @@ SEARCH_MULTIMATCH_TEMPLATE = " {name}-{number}{aliases}{info}\n"
 # The module holding text strings for the connection screen.
 # This module should contain one or more variables
 # with strings defining the look of the screen.
-CONNECTION_SCREEN_MODULE = "server.conf.connection_screens"
+# CONNECTION_SCREEN_MODULE = "server.conf.connection_screens"
+CONNECTION_SCREEN_MODULE = "evennia.contrib.base_systems.menu_login.connection_screens"
 # Modules that contain prototypes for use with the spawner mechanism.
 PROTOTYPE_MODULES = ["world.prototypes"]
 # Modules containining Prototype functions able to be embedded in prototype
@@ -74,10 +75,12 @@ PROT_FUNC_MODULES = ["evennia.prototypes.protfuncs"]
 ######################################################################
 
 # Command set used on session before account has logged in
-CMDSET_UNLOGGEDIN = "commands.default_cmdsets.UnloggedinCmdSet"
+# CMDSET_UNLOGGEDIN = "commands.default_cmdsets.UnloggedinCmdSet"
+CMDSET_UNLOGGEDIN = "evennia.contrib.base_systems.menu_login.UnloggedinCmdSet"
 # Parent class for all default commands. Changing this class will
 # modify all default commands, so do so carefully.
-COMMAND_DEFAULT_CLASS = "evennia.commands.default.muxcommand.MuxCommand"
+# COMMAND_DEFAULT_CLASS = "evennia.commands.default.muxcommand.MuxCommand"
+COMMAND_DEFAULT_CLASS = "commands.command.Command"
 
 
 ######################################################################
@@ -112,6 +115,8 @@ TYPECLASS_PATHS += [
 
 # Typeclass for account objects (linked to a character) (fallback)
 BASE_ACCOUNT_TYPECLASS = "typeclasses.accounts.accounts.Account"
+BASE_GUEST_TYPECLASS = "typeclasses.accounts.accounts.Guest"
+
 # Typeclass and base for all objects (fallback)
 BASE_OBJECT_TYPECLASS = "typeclasses.objects.objects.Object"
 # Typeclass for character objects linked to an account (fallback)
@@ -236,6 +241,7 @@ INPUT_CLEANUP_BYPASS_PERMISSIONS = ["Builder"]
 
 
 BACKGROUND_MODULE = "world.backgrounds.default"
+MODIFIER_MODULE = "world.modifiers.default"
 TRAIT_MODULE = "world.traits.default"
 
 
