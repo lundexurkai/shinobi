@@ -29,12 +29,14 @@ class Stat:
     self.handler = handler
     self.key = key
   
+  @property  
   def bonus(self) -> int:
     out = 0
     for mod in self.obj.get_all_modifiers():
       out += mod.stat_bonus(self.obj, self.key)
     return out
   
+  @property  
   def mult(self) -> float: 
     out = 1.0
     for mod in self.obj.get_all_modifiers():
@@ -56,6 +58,7 @@ class Stat:
   def base(self, value: int) -> None:
     self.db["base"] = value
   
+  @property  
   def actual(self):
     bonus, mult = self.get_bonuses()
     return round((self.base + bonus) * mult)
@@ -117,7 +120,7 @@ class DerivedStat(Stat):
 
   @property
   def base(self) -> int:
-    return super().base() + self.derived_base
+    return super().base + self.derived_base
   
   @property
   def derived_base(self) -> int:
@@ -125,6 +128,8 @@ class DerivedStat(Stat):
       return derived_func()
     return 0
   
+class ElementStat(BoundedStat):
+  pass
 
 class PoolStat(BoundedStat):
 

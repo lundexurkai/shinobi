@@ -80,7 +80,7 @@ CMDSET_UNLOGGEDIN = "evennia.contrib.base_systems.menu_login.UnloggedinCmdSet"
 # Parent class for all default commands. Changing this class will
 # modify all default commands, so do so carefully.
 # COMMAND_DEFAULT_CLASS = "evennia.commands.default.muxcommand.MuxCommand"
-COMMAND_DEFAULT_CLASS = "commands.command.Command"
+COMMAND_DEFAULT_CLASS = "commands.command.MuxCommand"
 
 
 ######################################################################

@@ -23,7 +23,7 @@ def get_all_backgrounds(category: Background.Category=None) -> dict[str, Type[Ba
     return dict(BACKGROUNDS)
 
 def get_available_backgrounds(char: Character, category: Background.Category=None) -> dict[str, Type[Background]]:
-  "Gets all backgrounds with prerequisites met with an optional category sorter."
+  "Gets all backgrounds with prerequisities met with an optional category sorter."
 
   backgrounds = get_all_backgrounds(category)
   results: dict[str, Type[Background]] = {}

@@ -67,8 +67,6 @@ def at_server_init():
         if inherits_from(cls, Trait):
           TRAITS[cls.get_name()] = cls
     
-    print(TRAITS)
-    
     logger.log_info(f"{len(TRAITS)} traits loaded.")
 
 

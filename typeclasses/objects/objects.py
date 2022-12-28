@@ -10,10 +10,12 @@ the other types, you can do so by adding this as a multiple
 inheritance.
 
 """
+from world.modifiers.modifiers import IModifiable
+
 from evennia.objects.objects import DefaultObject
 
 
-class ObjectParent:
+class ObjectParent(IModifiable):
     """
     This is a mixin that can be used to override *all* entities inheriting at
     some distance from DefaultObject (Objects, Exits, Characters and Rooms).

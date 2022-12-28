@@ -14,7 +14,7 @@ _STAT_CLASSES: dict[str, Type[Stat]] = {
   
 }
 
-_STATS: dict[str, dict[str, Any]] = {
+STATS: dict[str, dict[str, Any]] = {
 
   "str": {"type": "static", "base": 1, "name": "Strength"},
   "dex": {"type": "static", "base": 1, "name": "Dexterity"},
@@ -25,10 +25,14 @@ _STATS: dict[str, dict[str, Any]] = {
   "spi": {"type": "static", "base": 1, "name": "Spirit"},
   "pre": {"type": "static", "base": 1, "name": "Precision"},
   "man": {"type": "static", "base": 1, "name": "Manipulation"},
-  "ref": {"type": "static", "base": 1, "name": "Reflexes"},
 
   "acc": {"type": "derived", "base": 0, "name": "Accuracy"},
   "rea": {"type": "derived", "base": 0, "name": "Readiness"},
+
+  "def": {"type": "derived", "base": 0, "name": "Deflection"},
+  "for": {"type": "derived", "base": 0, "name": "Fortitude"},
+  "ref": {"type": "derived", "base": 0, "name": "Reflex"},
+  "wil": {"type": "derived", "base": 0, "name": "Willpower"},
   
   "hun": {"type": "bound", "min": 0, "max": 100, "base": 100, "name": "Hunger"},
   "thi": {"type": "bound", "min": 0, "max": 100, "base": 100, "name": "Thrist"},
@@ -39,7 +43,6 @@ _STATS: dict[str, dict[str, Any]] = {
   "en": {"type": "pool", "max": 100, "base": 100, "name": "Energy"},
   "cp": {"type": "pool", "max": 100, "base": 100, "name": "Capacity"},
   "re": {"type": "pool", "max": 0, "base": 0, "name": "Reserve"},
-  
 }
 
 class StatError(RuntimeError):
@@ -47,16 +50,18 @@ class StatError(RuntimeError):
 
 class StatHandler:
 
-  def __init__(self, obj, attr_name="stats") -> None:
-    if not obj.attributes.has(attr_name):
-      obj.attributes.add(attr_name, {})
+  def __init__(self, obj, attr_name="stats", attr_category="stats") -> None:
+
+    self.stats_data = obj.attributes.get(attr_name, category=attr_category)
+    if not self.stats_data:
+      obj.attributes.add(attr_name, {}, category=attr_category)
+      self.stats_data = obj.attributes.get(attr_name, category=attr_category)
     
-    self.stats_data = obj.attributes.get(attr_name)
     self.obj = obj
     self._cache: dict[str, Stat] = {}
 
-  def init_stats(self):
-    for stat_key, stat_properties in _STATS.items():
+  def init_defaults(self):
+    for stat_key, stat_properties in STATS.items():
       self.add(stat_key, **stat_properties)
 
   def _get_stat_class(self, type: str):
@@ -93,6 +98,17 @@ class StatHandler:
       stat_cls = self._get_stat_class(self.stats_data[stat_key]["type"])
       stat = self._cache[stat_key] = stat_cls(self, stat_key)
     return stat
+  
+  def get_all(self, type=None):
+    if len(self.stats_data) != len(self._cache):
+      for stat_key in self.all():
+        self.get(stat_key)
+    
+    stats = self._cache
+    if type is not None:
+      stats = {k: v for k, v in stats.items() if self.stats_data[k]["type"] == type}
+
+    return stats
 
   def db(self, stat_key: str):
     if stat_key not in self.stats_data:

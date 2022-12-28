@@ -6,8 +6,9 @@ class PromptHandler:
   def __init__(self, obj) -> None:
     self.obj = obj
   
-  def get(self):
+  def render_stats(self):
     prompt = ""
+
     row_template = "|{0}{1}|n: |w{2:4.1f}|n|y%|n "
     row = ""
     pool_order = {"fat": "G", "hun": "Y", "thi": "C"}
@@ -25,4 +26,10 @@ class PromptHandler:
         row += row_template.format(color, stat.name, stat.base, stat.max)
 
     prompt += "\n[ {} ]".format(row)
+
+    return prompt
+
+  def get(self):
+    prompt = ""
+    prompt += self.render_stats()
     return prompt

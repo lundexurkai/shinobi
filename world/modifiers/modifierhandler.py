@@ -16,18 +16,18 @@ class ModifierError(RuntimeError):
 class ModifierHandler:
   ""
 
-  save_by_id = True
-
-  def __init__(self, obj, attr_name: str, group: str, default=None) -> None:
+  def __init__(self, obj, attr_name: str, group: str, default=None, save_by_id=False) -> None:
     self.obj = obj
     self.attr_name = attr_name
     self.group = group
     self.default = default
+    self.save_by_id = save_by_id
+    self.modifier = None
     self.load()
 
   def load(self) -> None:
     flag = self.obj.attributes.get(self.attr_name, default=self.default)
-    if (modifier_cls := find_modifier_class(flag, self.group)):
+    if flag is not None and (modifier_cls := find_modifier_class(flag, self.group)):
       self.modifier = modifier_cls(self)
 
   def save(self) -> None:
@@ -40,7 +40,7 @@ class ModifierHandler:
     else:
       self.obj.attributes.remove(self.attr_name)
 
-  def get(self) -> None:
+  def get(self) -> Modifier | None:
     return self.modifier
 
   def set(self, flag: int | str, strict=False) -> Modifier | None:
@@ -64,8 +64,6 @@ class ModifierHandler:
 class ModifierListHandler:
   ""
 
-  save_by_id = True
-
   @property
   def mod_ids(self):
     return {mod.modifier_id: mod for mod in self._modifiers}
@@ -74,10 +72,11 @@ class ModifierListHandler:
   def mod_names(self):
     return {mod.get_name(): mod for mod in self._modifiers}
   
-  def __init__(self, obj, attr_name: str, group: str) -> None:
+  def __init__(self, obj, attr_name: str, group: str, save_by_id=False) -> None:
     self.obj = obj
     self.attr_name = attr_name
     self.group = group
+    self.save_by_id = save_by_id
     self._modifiers: list[Modifier] = []
     
     self.load()
@@ -152,8 +151,7 @@ class ModifierListHandler:
 class ModifierDictHandler(ModifierListHandler):
   "This class uses an inherited class `ModifierSaverDict` to implement a storage dict"
 
-  def load(self) -> None:
-  
+  def load(self) -> None:  
     self.flags_dict = self.obj.attributes.get(self.attr_name, default={})
     for flag in self.flags_dict.keys():
       if (modifier_cls := find_modifier_class(flag, self.group)):

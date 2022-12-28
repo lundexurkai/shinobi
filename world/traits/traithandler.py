@@ -24,25 +24,35 @@ class TraitHandler:
   def __init__(self, char: Character) -> None:
     self.char = char
   
-  def add(self, trait_name:str):
+  def add(self, trait_name:str, quiet=False):
     "Adds a trait to handler by name."
     if not (trait := find_trait(trait_name)):
       raise TraitError(f"Trait not found: {trait_name}")
     else:
       trait_name = trait.get_name()
 
-    if not self.has(trait_name):
-      self.char.tags.add(trait_name, category=self.tag_category)
+    if self.has(trait_name):
+      return
 
-  def remove(self, trait_name:str):
+    self.char.tags.add(trait_name, category=self.tag_category)
+
+    if not quiet:
+      self.char.msg(f"Trait has been added: {trait_name}")
+
+  def remove(self, trait_name:str, quiet=False):
     "Removes a trait from the handler by name."
     if not (trait := find_trait(trait_name)):
       raise TraitError(f"Trait not found: {trait_name}")
     else:
       trait_name = trait.get_name()
 
-    if self.has(trait_name):
-      self.char.tags.remove(trait_name, category=self.tag_category)
+    if not self.has(trait_name):
+      return
+    
+    self.char.tags.remove(trait_name, category=self.tag_category)
+
+    if not quiet:
+      self.char.msg(f"Trait has been removed: {trait_name}")
 
   def has(self, trait_name: str) -> bool:
     "Returns True if the name is found in traits otherwise False."

@@ -10,6 +10,7 @@ creation commands.
 from typeclasses.objects.objects import ObjectParent
 from world.backgrounds.backgroundhandler import BackgroundHandler
 from world.modifiers.modifierhandler import ModifierHandler
+from world.stats.elementhandler import ElementHandler
 from world.stats.stathandler import StatHandler
 from world.traits.traithandler import TraitHandler
 
@@ -21,46 +22,66 @@ from .handlers import PromptHandler
 
 
 class Character(ObjectParent, DefaultCharacter):
-    """"""
+  """"""
 
-    # properties
-    gender = AttributeProperty()
+  modifier_attrs = ["consciousness", "position", "ranking", "species", "village"]
 
-    @lazy_property
-    def backgrounds(self):
-      return BackgroundHandler(self)
-    
-    @lazy_property
-    def prompt(self):
-      return PromptHandler(self)
+  # properties
+  gender = AttributeProperty()
 
-    @lazy_property
-    def stats(self):
-      return StatHandler(self)
-    
-    @lazy_property
-    def traits(self):
-      return TraitHandler(self)
-
-    # modifiers
-    @lazy_property
-    def consciousness(self):
-      return ModifierHandler(self, "consciousness", "Consciousnesses")
-    
-    @lazy_property
-    def position(self):
-      return ModifierHandler(self, "position", "Positions")
+  @lazy_property
+  def backgrounds(self):
+    return BackgroundHandler(self)
   
-    @lazy_property
-    def species(self):
-      return ModifierHandler(self, "species", "Species")
+  @lazy_property
+  def prompt(self):
+    return PromptHandler(self)
 
-    # methods
+  @lazy_property
+  def elements(self):
+    return ElementHandler(self)
 
-    def at_object_creation(self):
-        "Called when this character is created."
-        return super().at_object_creation()
+  @lazy_property
+  def stats(self):
+    return StatHandler(self)
+  
+  @lazy_property
+  def traits(self):
+    return TraitHandler(self)
 
-    def at_object_delete(self):
-        "Called when this character is deleted."
-        return super().at_object_delete()
+  # modifiers
+  @lazy_property
+  def consciousness(self):
+    return ModifierHandler(self, "consciousness", "Consciousnesses", default="conscious")
+  
+  @lazy_property
+  def position(self):
+    return ModifierHandler(self, "position", "Positions", default="standing")
+
+  @lazy_property
+  def ranking(self):
+    return ModifierHandler(self, "ranking", "Rankings", default="unknown")
+
+  @lazy_property
+  def species(self):
+    return ModifierHandler(self, "species", "Species", default="human")
+  
+  @lazy_property
+  def village(self):
+    return ModifierHandler(self, "village", "Villages", default="missing")
+
+  # methods
+
+  def at_object_creation(self):
+    "Called when this character is created."
+    
+    if len(self.elements.all()) == 0:
+      self.elements.init_defaults()
+
+    if len(self.stats.all()) == 0:
+      self.stats.init_defaults()
+    
+
+  def at_object_delete(self):
+    "Called when this character is deleted."
+    return super().at_object_delete()

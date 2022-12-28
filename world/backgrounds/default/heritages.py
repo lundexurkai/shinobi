@@ -14,6 +14,7 @@ class AburameHeritage(Background):
   
   prerequisities = {
     "blocked_traits": ("bloodline", "orphan"),
+    "stats": (True, {"cp": 10}),
   }
 
 class AkimichiHeritage(Background):
@@ -27,6 +28,7 @@ class AkimichiHeritage(Background):
   
   prerequisities = {
     "blocked_traits": ("bloodline", "orphan"),
+    "stats": (True, {"cp": 10}),
   }
 
 class HyuugaHeritage(Background):
@@ -40,6 +42,7 @@ class HyuugaHeritage(Background):
   
   prerequisities = {
     "backgrounds": (True, ("hamura's lineage", )),
+    "stats": (True, {"cp": 10}),
     "blocked_traits": ("clan", "orphan")
   }
 
@@ -54,6 +57,7 @@ class InuzukaHeritage(Background):
   
   prerequisities = {
     "blocked_traits": ("bloodline", "orphan"),
+    "stats": (True, {"cp": 10}),
   }
 
 class KaguyaHeritage(Background):
@@ -67,6 +71,7 @@ class KaguyaHeritage(Background):
   
   prerequisities = {
     "backgrounds": (True, ("kaguya's lineage", )),
+    "stats": (True, {"cp": 10}),
     "blocked_traits": ("clan", "orphan")
   }
 
@@ -81,6 +86,7 @@ class NaraHeritage(Background):
   
   prerequisities = {
     "blocked_traits": ("bloodline", "orphan"),
+    "stats": (True, {"cp": 10}),
   }
 
 
@@ -95,6 +101,7 @@ class SenjuHeritage(Background):
   
   prerequisities = {
     "backgrounds": (True, ("asura's lineage", )),
+    "stats": (True, {"cp": 10}),
     "blocked_traits": ("clan", "orphan")
   }
 
@@ -109,6 +116,7 @@ class UzumakiHeritage(Background):
   
   prerequisities = {
     "backgrounds": (True, ("asura's lineage", )),
+    "stats": (True, {"cp": 10}),
     "blocked_traits": ("clan", "orphan")
   }
 
@@ -123,6 +131,7 @@ class UchihaHeritage(Background):
   
   prerequisities = {
     "backgrounds": (True, ("indra's lineage", )),
+    "stats": (True, {"cp": 10}),
     "blocked_traits": ("clan", "orphan")
   }
 
@@ -137,6 +146,7 @@ class YamanakaHeritage(Background):
   
   prerequisities = {
     "blocked_traits": ("bloodline", "orphan"),
+    "stats": (True, {"cp": 10}),
   }
 
 

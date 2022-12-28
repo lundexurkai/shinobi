@@ -14,20 +14,32 @@ class _Village(Modifier):
 class Missing(_Village):
   modifier_id = 0
 
+  name = "Missing"
+
 class Leaf(_Village):
   modifier_id = 1
+
+  name = "Leaf"
 
 class Sand(_Village):
   modifier_id = 2
 
+  name = "Sand"
+
 class Mist(_Village):
   modifier_id = 3
+
+  name = "Mist"
 
 class Stone(_Village):
   modifier_id = 4
 
+  name = "Stone"
+
 class Cloud(_Village):
   modifier_id = 5
+
+  name = "Cloud"
 
 class _VillageRanking(Modifier):
   """"""
@@ -36,23 +48,42 @@ class _VillageRanking(Modifier):
   modifier_id = -1
 
 
-class Citizen(_VillageRanking):
+class Unknown(_VillageRanking):
   modifier_id = 0
 
-class Student(_VillageRanking):
+  name = "Unknown"
+
+class Citizen(_VillageRanking):
   modifier_id = 1
 
-class Genin(_VillageRanking):
+  name = "Citizen"
+
+class Student(_VillageRanking):
   modifier_id = 2
 
-class Chuunin(_VillageRanking):
+  name = "Student"
+
+class Genin(_VillageRanking):
   modifier_id = 3
 
-class SpecialJounin(_VillageRanking):
+  name = "Genin"
+
+class Chuunin(_VillageRanking):
   modifier_id = 4
 
-class Jounin(_VillageRanking):
+  name = "Chuunin"
+
+class SpecialJounin(_VillageRanking):
   modifier_id = 5
 
-class Anbu(_VillageRanking):
+  name = "Special Jounin"
+
+class Jounin(_VillageRanking):
   modifier_id = 6
+
+  name = "Jounin"
+
+class Anbu(_VillageRanking):
+  modifier_id = 7
+
+  name = "Anbu"
