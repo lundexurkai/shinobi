@@ -28,12 +28,10 @@ def at_server_init():
     """
 
     from django.conf import settings
-    from world.backgrounds import BACKGROUNDS
-    from world.backgrounds.backgrounds import Background
-    from world.modifiers import MODIFIERS_IDS, MODIFIERS_NAMES
-    from world.modifiers.modifiers import Modifier
-    from world.traits import TRAITS
-    from world.traits.traits import Trait
+    from shinobi.backgrounds import BACKGROUNDS
+    from shinobi.backgrounds.backgrounds import Background
+    from shinobi.modifiers import MODIFIERS_IDS, MODIFIERS_NAMES
+    from shinobi.modifiers.modifiers import Modifier
 
     from evennia.utils.utils import (all_from_module, callables_from_module,
                                      inherits_from)
@@ -60,14 +58,6 @@ def at_server_init():
     
     for mod_group, modifiers in MODIFIERS_NAMES.items():
       logger.log_info(f"{mod_group} modifiers found: [{len(modifiers)} with names].")
-  
-    variables = all_from_module(settings.TRAIT_MODULE)
-    for path in variables.get("modules", []):
-      for cls in callables_from_module(path).values():
-        if inherits_from(cls, Trait):
-          TRAITS[cls.get_name()] = cls
-    
-    logger.log_info(f"{len(TRAITS)} traits loaded.")
 
 
 def at_server_start():

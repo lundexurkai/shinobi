@@ -5,11 +5,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from world.backgrounds import find_background
+from shinobi.backgrounds import find_background
 
 if TYPE_CHECKING:
+  from shinobi.backgrounds.backgrounds import Background
   from typeclasses.characters.characters import Character
-  from world.backgrounds.backgrounds import Background
 
 class BackgroundError(RuntimeError):
   "Background error"

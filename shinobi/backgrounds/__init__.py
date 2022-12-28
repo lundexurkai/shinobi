@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
 
+from shinobi.modifiers import MODIFIERS_NAMES
 from shinobi.utils import fuzzy_search
 
 if TYPE_CHECKING:
@@ -39,3 +40,10 @@ def find_background(background_name: str) -> Type[Background] | None:
     return background
   else:
     return fuzzy_search(background_name, BACKGROUNDS.values(), exact=True)
+
+def find_trait(trait_name: str) -> Type[Background] | None:
+  traits = MODIFIERS_NAMES["Traits"]
+  if (trait := traits.get(trait_name)):
+    return trait
+  else:
+    return fuzzy_search(trait_name, traits.values(), exact=True)

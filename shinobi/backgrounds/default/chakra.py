@@ -1,6 +1,6 @@
 "Chakra backgrounds"
 
-from world.backgrounds.backgrounds import Background
+from shinobi.backgrounds.backgrounds import Background
 
 
 class NullChakra(Background):

@@ -9,6 +9,8 @@ from evennia.utils.utils import lazy_property
 
 class Stat:
 
+  type = ""
+
   @property
   def obj(self):
     return self.handler.obj
@@ -24,6 +26,12 @@ class Stat:
   @name.setter
   def name(self, value: str) -> None:
     self.db["name"] = value
+
+  def __init_subclass__(cls) -> None:
+    from shinobi.stats import STAT_TYPES
+
+    if cls.type and cls.type not in STAT_TYPES:
+      STAT_TYPES[cls.type] = cls
   
   def __init__(self, handler, key: str):
     self.handler = handler
@@ -50,6 +58,11 @@ class Stat:
       mult += mod.stat_multiplier(self.obj, self.key)
     return bonus, mult
 
+class StaticStat(Stat):
+  ""
+
+  type = "static"
+
   @property
   def base(self) -> int:
     return self.db["base"]
@@ -70,8 +83,10 @@ class Stat:
   def modify(self, value: int) -> int:
     return self.set(self.base + value)
 
-class BoundedStat(Stat):
+class BoundedStat(StaticStat):
   ""
+
+  type = "bounded"
 
   @property
   def max(self) -> int:
@@ -94,7 +109,6 @@ class BoundedStat(Stat):
   
   def set(self, value: int) -> int:
     self.base = min(max(value, self.min), self.max)
-    self.save()
     return self.base
   
   def modify(self, value: int) -> int:
@@ -113,7 +127,9 @@ class BoundedStat(Stat):
     self.base = self.min
   
 
-class DerivedStat(Stat):
+class DerivedStat(StaticStat):
+
+  type = "derived"
 
   def __init__(self, handler, key: str):
     super().__init__(handler, key)
@@ -127,11 +143,12 @@ class DerivedStat(Stat):
     if (derived_func := getattr(self.handler, f"get_{self.key}", None)):
       return derived_func()
     return 0
-  
-class ElementStat(BoundedStat):
-  pass
 
-class PoolStat(BoundedStat):
+
+
+class Pool(BoundedStat):
+
+  type = "pool"
 
   @property
   def max(self) -> int:
@@ -143,6 +160,11 @@ class PoolStat(BoundedStat):
     if max_func := getattr(self.handler, f"get_{self.name.lower()}", None):
       out += max_func()
     return out
+
+  @property
+  def actual(self):
+    bonus, mult = self.get_bonuses()
+    return round((self.max + bonus) * mult)
   
   @property
   def min(self) -> int:

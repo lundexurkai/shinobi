@@ -240,10 +240,8 @@ LOGIN_THROTTLE_TIMEOUT = 5 * 60
 INPUT_CLEANUP_BYPASS_PERMISSIONS = ["Builder"]
 
 
-BACKGROUND_MODULE = "world.backgrounds.default"
-MODIFIER_MODULE = "world.modifiers.default"
-TRAIT_MODULE = "world.traits.default"
-
+BACKGROUND_MODULE = "shinobi.backgrounds.default"
+MODIFIER_MODULE = "shinobi.modifiers.default"
 
 ######################################################################
 # Settings given in secret_settings.py override those in this file.

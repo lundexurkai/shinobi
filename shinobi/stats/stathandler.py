@@ -2,48 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Any, Type
+from typing import TYPE_CHECKING, Any, Type
 
-from .stats import BoundedStat, DerivedStat, PoolStat, Stat
+from shinobi.stats import STAT_TYPES, STATS
 
-_STAT_CLASSES: dict[str, Type[Stat]] = {
-  "static": Stat,
-  "bound": BoundedStat,
-  "derived": DerivedStat,
-  "pool": PoolStat,
-  
-}
-
-STATS: dict[str, dict[str, Any]] = {
-
-  "str": {"type": "static", "base": 1, "name": "Strength"},
-  "dex": {"type": "static", "base": 1, "name": "Dexterity"},
-  "end": {"type": "static", "base": 1, "name": "Endurance"},
-  "int": {"type": "static", "base": 1, "name": "Intelligence"},
-  "per": {"type": "static", "base": 1, "name": "Perception"},
-  "wit": {"type": "static", "base": 1, "name": "Wits"},
-  "spi": {"type": "static", "base": 1, "name": "Spirit"},
-  "pre": {"type": "static", "base": 1, "name": "Precision"},
-  "man": {"type": "static", "base": 1, "name": "Manipulation"},
-
-  "acc": {"type": "derived", "base": 0, "name": "Accuracy"},
-  "rea": {"type": "derived", "base": 0, "name": "Readiness"},
-
-  "def": {"type": "derived", "base": 0, "name": "Deflection"},
-  "for": {"type": "derived", "base": 0, "name": "Fortitude"},
-  "ref": {"type": "derived", "base": 0, "name": "Reflex"},
-  "wil": {"type": "derived", "base": 0, "name": "Willpower"},
-  
-  "hun": {"type": "bound", "min": 0, "max": 100, "base": 100, "name": "Hunger"},
-  "thi": {"type": "bound", "min": 0, "max": 100, "base": 100, "name": "Thrist"},
-  "fat": {"type": "bound", "min": 0, "max": 100, "base": 0, "name": "Fatigue"},
-  
-  "hp": {"type": "pool", "max": 50, "base": 50, "name": "Health"},
-  "ch": {"type": "pool", "max": 10, "base": 10, "name": "Chakra"},
-  "en": {"type": "pool", "max": 100, "base": 100, "name": "Energy"},
-  "cp": {"type": "pool", "max": 100, "base": 100, "name": "Capacity"},
-  "re": {"type": "pool", "max": 0, "base": 0, "name": "Reserve"},
-}
+if TYPE_CHECKING:
+  from .stats import Stat
 
 class StatError(RuntimeError):
   pass
@@ -65,9 +29,10 @@ class StatHandler:
       self.add(stat_key, **stat_properties)
 
   def _get_stat_class(self, type: str):
-    if (stat_cls := _STAT_CLASSES.get(type, None)):
+    if not (stat_cls := STAT_TYPES.get(type, None)):
+      raise StatError(f"Stat type '{type}' not found.")
+    else:
       return stat_cls
-    raise StatError(f"Stat type '{type}' not found.")
 
   def add(self, stat_key: str, name=None, type="static", force=True, **stat_properties):
     if stat_key in self.stats_data:
@@ -76,7 +41,7 @@ class StatHandler:
       else:
         raise StatError(f"Stat '{stat_key}' already exists.")
 
-    if type not in _STAT_CLASSES:
+    if type not in STAT_TYPES:
       raise StatError(f"Stat type '{type}' not found.")
     
     stat_properties["name"] = stat_key.title() if not name else name
@@ -99,16 +64,17 @@ class StatHandler:
       stat = self._cache[stat_key] = stat_cls(self, stat_key)
     return stat
   
-  def get_all(self, type=None):
-    if len(self.stats_data) != len(self._cache):
-      for stat_key in self.all():
+  def get_all(self, type=None) -> dict[str, Stat]:
+    stats_data = dict(self.stats_data)
+    for stat_key in stats_data:
+      if stat_key not in self._cache.keys():
         self.get(stat_key)
     
     stats = self._cache
     if type is not None:
-      stats = {k: v for k, v in stats.items() if self.stats_data[k]["type"] == type}
-
-    return stats
+      return dict(filter(lambda i: i[1].type == type, stats.items()))
+    else:
+      return stats
 
   def db(self, stat_key: str):
     if stat_key not in self.stats_data:
@@ -133,7 +99,6 @@ class StatHandler:
   def get_health_min(self):
     min_hp = 0
     if (hp := self.get("hp")):
-      hp: PoolStat
       min_hp = round(hp.max * -0.1)
     return min_hp
   

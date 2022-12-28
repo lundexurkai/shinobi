@@ -10,7 +10,7 @@ the other types, you can do so by adding this as a multiple
 inheritance.
 
 """
-from world.modifiers.modifiers import IModifiable
+from shinobi.modifiers.modifiers import IModifiable
 
 from evennia.objects.objects import DefaultObject
 

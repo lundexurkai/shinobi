@@ -1,6 +1,6 @@
 """"""
 
-from world.modifiers.modifiers import Modifier
+from shinobi.modifiers.modifiers import Modifier
 
 
 class _CharacterFlag(Modifier):

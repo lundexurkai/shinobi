@@ -1,17 +1,19 @@
-"""Information commands."""
+"""Character General commands."""
 
 import textwrap
 from collections import defaultdict
 from typing import Iterable, Type
 
+from shinobi.backgrounds import (find_background, find_trait,
+                                 get_all_backgrounds,
+                                 get_available_backgrounds)
+from shinobi.backgrounds.backgrounds import Background
+from shinobi.stats import STATS
+from shinobi.stats.elements import Element
 from shinobi.utils import fuzzy_search
-from world.backgrounds import (find_background, get_all_backgrounds,
-                               get_available_backgrounds)
-from world.backgrounds.backgrounds import Background
-from world.stats.stathandler import STATS
-from world.traits import find_trait
 
 from evennia import InterruptCommand
+from evennia.commands.cmdset import CmdSet
 from evennia.utils.utils import iter_to_str
 
 from .command import Command, MuxCommand
@@ -23,26 +25,18 @@ class CmdBackgrounds(MuxCommand):
 
   usage:
     backgrounds [option = [args]]
+    backgrounds [= <category>]
   
-  switches:
-    available   - shows all available backgrounds.
-    details     - shows information about a background by name.
-    add         - adds a background to the character, prerequisities are met.
-    remove      - removes a non-permantent background.
-
-  examples:
-    backgrounds                             - shows all current backgrounds.
-    backgrounds = <category>                - shows current backgrounds under a category.
-    backgrounds available                   - shows all available backgrounds.
-    backgrounds available = <category>      - shows all available backgrounds under a category.
-    backgrounds details = <background name> - shows information about the background.
-    backgrounds add = <background name>
-    backgrounds remove = <background name>
+  options:
+    available [= <category name>]   - shows all available backgrounds.
+    details = <background name>     - shows information about a background by name.
+    add = <background name>         - adds a background to the character, prerequisities are met.
+    remove = <background name>      - removes a non-permantent background.
   """
   
   key = "backgrounds"
   aliases = "background"
-  help_category = "Information"
+  help_category = "Character General"
   options = ("available", "details", "add", "remove")
 
   def parse(self):
@@ -150,7 +144,7 @@ class CmdBackgrounds(MuxCommand):
     text = self.styled_header("Background Details:")
 
     text += "\n|| |c{:<24}|n: {}".format("Background Name", background.name)
-    text += "\n|| |c{:<24}|n: {}".format("Category", background.category.title_name)
+    text += "\n|| |c{:<24}|n: {}".format("Category", background.category.name)
     text += newline_footer
 
     if (blocked_backgrounds := background.prerequisities.get("blocked_backgrounds", [])):
@@ -245,7 +239,7 @@ class CmdBackgrounds(MuxCommand):
     
     header_text = "Available Backgrounds" 
     if category is not None:
-      header_text += f": {category.title_name}"
+      header_text += f": {category.name}"
 
     text = self.styled_header(header_text)
 
@@ -263,7 +257,7 @@ class CmdBackgrounds(MuxCommand):
         
         for category in Background.Category:
           if (backgrounds := categories[category]):
-            text += "\n" + self.styled_header(category.title_name)
+            text += "\n" + self.styled_header(category.name)
             text += "\n" + self._show_backgrounds(backgrounds)
 
     text += "\n" + self.styled_footer()
@@ -275,7 +269,7 @@ class CmdBackgrounds(MuxCommand):
     caller = self.caller
     header_text = "Backgrounds" 
     if category is not None:
-      header_text += f": {category.title_name}"
+      header_text += f": {category.name}"
 
     text = self.styled_header(header_text)
 
@@ -293,7 +287,7 @@ class CmdBackgrounds(MuxCommand):
         
         for category in Background.Category:
           if (backgrounds := categories[category]):
-            text += "\n" + self.styled_header(category.title_name)
+            text += "\n" + self.styled_header(category.name)
             text += "\n" + self._show_backgrounds(backgrounds)
 
     text += "\n" + self.styled_footer()
@@ -302,11 +296,99 @@ class CmdBackgrounds(MuxCommand):
 
     self.msg(text)
 
+class CmdElements(MuxCommand):
+  """
+  shows information related to affinities
+
+  usage:
+    elements
+  """
+  
+  key = "elements"
+  aliases = "element"
+  help_category = "Character General"
+  options = ()
+
+  def parse(self):
+    super().parse()
+
+    if self.lhs and self.lhs not in self.options:
+      self.msg(f"Not a valid option: {self.lhs}")
+      raise InterruptCommand
+  
+  def func(self):
+
+    match self.lhs:
+      case _:
+        self.show_known_elements()
+
+
+  def _format_table(self, table):
+    table.reformat_column(0, align="l")
+    table.reformat_column(1, width=20)
+    table.reformat_column(2, width=25)
+    table.reformat(width=self.client_width())
+
+  def _show_elements(self, elements: Iterable[Element]):
+    table = self.styled_table(border="cols", align="c")
+
+    for element in elements:
+      exp_percent = 100.0 * (element.exp / element.exp_cost)
+
+      table.add_row(
+        "|c{}|n".format(element.name), 
+        "|w{}|n".format(element.rank),
+        "|w{:03d}|n [ |x{:3d}|n ]".format(element.actual, element.max),
+        "|w{:4.1f}|y%|n  [ |c{:3d}|n ]".format(exp_percent, element.exp_cost)
+      )
+    # format table
+    self._format_table(table)
+    
+    return str(table)
+
+  def show_known_elements(self):
+    elements = self.caller.elements.get_all()
+    text = self.styled_header("Elements")
+
+    if not elements:
+      text += "\n|| You do not have any elemental affinities."
+    else:
+      headers = ("Element", "Rank", "Affinity", "Exp % [Exp Cost]")
+      table = self.styled_table(border="cols", align="c")
+      table.add_row(*headers)
+    
+      self._format_table(table)
+      text += "\n" + str(table)
+
+      categories = defaultdict(list)
+      for element in elements.values():
+          categories[element.category].append(element)
+
+      for category in Element.Category:
+        if (elements := categories[category]):
+          text += "\n" + self.styled_header(category.name)
+          text += "\n" + self._show_elements(elements)
+    
+    text += "\n" + self.styled_footer()
+    self.msg(text)
+
 class CmdMissions(Command):
   """"""
   key = "missions"
   aliases = "mission"
-  help_category = "Information"
+  help_category = "Character General"
+
+  def parse(self):
+    return super().parse()
+  
+  def func(self):
+    return super().func()
+
+class CmdStyles(Command):
+  """"""
+  key = "styles"
+  aliases = "style"
+  help_category = "Character General"
 
   def parse(self):
     return super().parse()
@@ -318,7 +400,7 @@ class CmdSheet(Command):
   """"""
   key = "sheet"
   aliases = "score"
-  help_category = "Information"
+  help_category = "Character General"
 
   def show_char_details(self):
     caller = self.caller
@@ -336,7 +418,6 @@ class CmdSheet(Command):
 
     return str(table)
 
-  
   def show_static_stats(self):
     stats = list(self.caller.stats.get_all("static").values())
 
@@ -384,8 +465,8 @@ class CmdSheet(Command):
     table.reformat(width=self.client_width())
     return str(table)
   
-  def show_bound_stats(self):
-    stats = list(self.caller.stats.get_all("bound").values())
+  def show_bounded_stats(self):
+    stats = list(self.caller.stats.get_all("bounded").values())
     table_data, num_cols = [], 3
     for i in range(num_cols):
       data = [[], []]
@@ -412,7 +493,7 @@ class CmdSheet(Command):
       data = [[], []]
       for stat in stats[i::num_cols]:
         data[0].append("|c{}|n".format(stat.name))
-        data[1].append("|w{:3d}|n [|x{:03d}|n]".format(stat.base, stat.max))
+        data[1].append("|w{:3d}|n [|x{:03d}|n]".format(stat.base, stat.actual))
       table_data.extend(data)
 
     table = self.styled_table(border="cols", table=table_data)
@@ -437,11 +518,35 @@ class CmdSheet(Command):
     text += newline_footer
     text += "\n" + self.show_derived_stats()
     text += newline_footer
-    text += "\n" + self.show_bound_stats()
+    text += "\n" + self.show_bounded_stats()
     text += newline_footer
     text += "\n" + self.show_pool_stats()
     text += newline_footer
 
     self.msg(text)
 
-    # return super().func()
+class CmdTechniques(Command):
+  """"""
+  key = "techniques"
+  aliases = "technique"
+  help_category = "Character General"
+
+  def parse(self):
+    return super().parse()
+  
+  def func(self):
+    return super().func()
+
+class CharacterGeneralCmdSet(CmdSet):
+  ""
+
+  key = "character_general"
+
+  def at_cmdset_creation(self):
+    "Populate the cmdset"
+    self.add(CmdBackgrounds())
+    self.add(CmdElements())
+    self.add(CmdMissions())
+    self.add(CmdStyles())
+    self.add(CmdSheet())
+    self.add(CmdTechniques())

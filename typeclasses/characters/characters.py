@@ -7,18 +7,17 @@ is setup to be the "default" character type created by the default
 creation commands.
 
 """
+from shinobi.backgrounds.backgroundhandler import BackgroundHandler
+from shinobi.modifiers.modifierhandler import ModifierHandler
+from shinobi.stats.elementhandler import ElementHandler
+from shinobi.stats.stathandler import StatHandler
 from typeclasses.objects.objects import ObjectParent
-from world.backgrounds.backgroundhandler import BackgroundHandler
-from world.modifiers.modifierhandler import ModifierHandler
-from world.stats.elementhandler import ElementHandler
-from world.stats.stathandler import StatHandler
-from world.traits.traithandler import TraitHandler
 
 from evennia import AttributeProperty
 from evennia.objects.objects import DefaultCharacter
 from evennia.utils.utils import lazy_property
 
-from .handlers import PromptHandler
+from .handlers import PromptHandler, TraitHandler
 
 
 class Character(ObjectParent, DefaultCharacter):

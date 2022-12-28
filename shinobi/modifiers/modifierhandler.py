@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from shinobi.modifiers import find_modifier_class
 from shinobi.utils import fuzzy_search
-from world.modifiers import find_modifier_class
 
 if TYPE_CHECKING:
   from .modifiers import Modifier
@@ -117,7 +117,7 @@ class ModifierListHandler:
     else:
       if (mod := self.mod_names.get(flag, None)):
         return mod
-      if (mod_name := fuzzy_search(flag, self.mod_names.keys(), exact)):
+      if (mod_name := fuzzy_search(flag, self.mod_names.keys(), exact=exact)):
         return self.mod_names[mod_name]
 
   def has(self, flag: int | str):

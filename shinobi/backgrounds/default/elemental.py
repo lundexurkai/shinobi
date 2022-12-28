@@ -1,11 +1,11 @@
 "Elemental backgrounds"
 
-from world.backgrounds.backgrounds import Background
+from shinobi.backgrounds.backgrounds import Background
 
 
 class BoilAffinity(Background):
   """
-  You posssess the affinity for the boil element, this is the the result of combining the water and fire elements.
+  You possess the affinity for the boil element, this is the the result of combining the water and fire elements.
   """
 
   name = "Boil Affinity"
@@ -19,7 +19,7 @@ class BoilAffinity(Background):
 
 class ExplosionAffinity(Background):
   """
-  You posssess the affinity for the explosion element, this is the the result of combining the earth and lightning elements.
+  You possess the affinity for the explosion element, this is the the result of combining the earth and lightning elements.
   """
 
   name = "Explosion Affinity"
@@ -33,7 +33,7 @@ class ExplosionAffinity(Background):
 
 class MagnetAffinity(Background):
   """
-  You posssess the affinity for the magnet element, this is the the result of combining the wind and earth elements.
+  You possess the affinity for the magnet element, this is the the result of combining the wind and earth elements.
   """
 
   name = "Magnet Affinity"
@@ -47,7 +47,7 @@ class MagnetAffinity(Background):
 
 class IceAffinity(Background):
   """
-  You posssess the affinity for the ice element, this is the the result of combining the water and wind elements.
+  You possess the affinity for the ice element, this is the the result of combining the water and wind elements.
   """
 
   name = "Ice Affinity"
@@ -61,7 +61,7 @@ class IceAffinity(Background):
 
 class LavaAffinity(Background):
   """
-  You posssess the affinity for the lava element, this is the the result of combining the fire and earth elements.
+  You possess the affinity for the lava element, this is the the result of combining the fire and earth elements.
   """
 
   name = "Lava Affinity"
@@ -75,7 +75,7 @@ class LavaAffinity(Background):
 
 class ScorchAffinity(Background):
   """
-  You posssess the affinity for the scorch element, this is the the result of combining the fire and water elements.
+  You possess the affinity for the scorch element, this is the the result of combining the fire and water elements.
   """
 
   name = "Scorch Affinity"
@@ -89,7 +89,7 @@ class ScorchAffinity(Background):
 
 class StormAffinity(Background):
   """
-  You posssess the affinity for the boil element, this is the the result of combining the lightning and water elements.
+  You possess the affinity for the boil element, this is the the result of combining the lightning and water elements.
   """
 
   name = "Storm Affinity"
@@ -103,7 +103,7 @@ class StormAffinity(Background):
 
 class WoodAffinity(Background):
   """
-  You posssess the affinity for the wood element, this is the the result of combining the earth and water elements.
+  You possess the affinity for the wood element, this is the the result of combining the earth and water elements.
   """
 
   name = "Wood Affinity"
