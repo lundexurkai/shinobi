@@ -8,41 +8,58 @@ creation commands.
 
 """
 from shinobi.backgrounds.backgroundhandler import BackgroundHandler
+from shinobi.backgrounds.traithandler import TraitHandler
 from shinobi.modifiers.modifierhandler import ModifierHandler
 from shinobi.stats.elementhandler import ElementHandler
 from shinobi.stats.stathandler import StatHandler
+from shinobi.styles.stylehandler import StyleHandler
+from shinobi.techniques.techniquehandler import TechniqueHandler
 from typeclasses.objects.objects import ObjectParent
 
 from evennia import AttributeProperty
+from evennia.contrib.game_systems.cooldowns.cooldowns import CooldownHandler
 from evennia.objects.objects import DefaultCharacter
 from evennia.utils.utils import lazy_property
 
-from .handlers import PromptHandler, TraitHandler
+from .handlers import PromptHandler
 
 
 class Character(ObjectParent, DefaultCharacter):
   """"""
 
-  modifier_attrs = ["consciousness", "position", "ranking", "species", "village"]
+  modifier_attrs = ["consciousness", "position", "ranking", "species", "traits", "village"]
 
   # properties
-  gender = AttributeProperty()
+  gender = AttributeProperty(default="neutral")
+  exp = AttributeProperty(default=0)
 
   @lazy_property
   def backgrounds(self):
     return BackgroundHandler(self)
   
   @lazy_property
-  def prompt(self):
-    return PromptHandler(self)
+  def cooldowns(self):
+    return CooldownHandler(self)
 
   @lazy_property
   def elements(self):
     return ElementHandler(self)
 
   @lazy_property
+  def prompt(self):
+    return PromptHandler(self)
+
+  @lazy_property
   def stats(self):
     return StatHandler(self)
+
+  @lazy_property
+  def styles(self):
+    return StyleHandler(self)
+
+  @lazy_property
+  def techniques(self):
+    return TechniqueHandler(self)
   
   @lazy_property
   def traits(self):
@@ -73,13 +90,8 @@ class Character(ObjectParent, DefaultCharacter):
 
   def at_object_creation(self):
     "Called when this character is created."
-    
-    if len(self.elements.all()) == 0:
-      self.elements.init_defaults()
-
-    if len(self.stats.all()) == 0:
-      self.stats.init_defaults()
-    
+    self.elements.init_defaults()
+    self.stats.init_defaults()
 
   def at_object_delete(self):
     "Called when this character is deleted."

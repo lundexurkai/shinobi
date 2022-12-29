@@ -239,9 +239,10 @@ LOGIN_THROTTLE_TIMEOUT = 5 * 60
 # specific list of perms are not given to the helper function.
 INPUT_CLEANUP_BYPASS_PERMISSIONS = ["Builder"]
 
-
-BACKGROUND_MODULE = "shinobi.backgrounds.default"
-MODIFIER_MODULE = "shinobi.modifiers.default"
+BACKGROUNDS_MODULE = "shinobi.backgrounds.default"
+MODIFIERS_MODULE = "shinobi.modifiers.default"
+TECHNIQUES_MODULE = "shinobi.techniques.default"
+STYLES_MODULE = "shinobi.styles.default"
 
 ######################################################################
 # Settings given in secret_settings.py override those in this file.

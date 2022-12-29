@@ -17,7 +17,7 @@ at_server_cold_stop()
 
 """
 
-
+import os
 
 from evennia.utils import logger
 
@@ -32,32 +32,56 @@ def at_server_init():
     from shinobi.backgrounds.backgrounds import Background
     from shinobi.modifiers import MODIFIERS_IDS, MODIFIERS_NAMES
     from shinobi.modifiers.modifiers import Modifier
+    from shinobi.styles import STYLES
+    from shinobi.styles.styles import Style
+    from shinobi.techniques import TECHNIQUES
+    from shinobi.techniques.techniques import Technique
 
     from evennia.utils.utils import (all_from_module, callables_from_module,
                                      inherits_from)
-
-    variables = all_from_module(settings.BACKGROUND_MODULE)
-    for path in variables.get("modules", []):
-      for cls in callables_from_module(path).values():
-        if inherits_from(cls, Background):
-          BACKGROUNDS[cls.get_name()] = cls
     
-    logger.log_info(f"{len(BACKGROUNDS)} backgrounds loaded.")
-  
-    variables = all_from_module(settings.MODIFIER_MODULE)
+    variables = all_from_module(settings.MODIFIERS_MODULE)
     for path in variables.get("modules", []):
       for cls in callables_from_module(path).values():
         if inherits_from(cls, Modifier):
           MODIFIERS_NAMES[cls.modifier_group][cls.get_name()] = cls
-
           if cls.modifier_id != -1:
             MODIFIERS_IDS[cls.modifier_group][cls.modifier_id] = cls
 
-    for mod_group, modifiers in MODIFIERS_IDS.items():
-      logger.log_info(f"{mod_group} modifiers found: [{len(modifiers)} with ids].")
+    all_groups = list(MODIFIERS_IDS.keys())
+    all_groups.extend(group for group in MODIFIERS_NAMES.keys() if group not in all_groups)
+
+    for group in all_groups:
+      num_ids = len(MODIFIERS_IDS[group])
+      num_names = len(MODIFIERS_NAMES[group])
+      logger.log_info(f"{group} modifiers found. [{num_ids} ids, {num_names} names]")
+
+    variables = all_from_module(settings.BACKGROUNDS_MODULE)
+    for path in variables.get("modules", []):
+      for cls in callables_from_module(path).values():
+        if inherits_from(cls, Background):
+          BACKGROUNDS[cls.get_name()] = cls
+
+    logger.log_info("{} total backgrounds found.".format(len(BACKGROUNDS)))
+
+    variables = all_from_module(settings.STYLES_MODULE)
+    for path in variables.get("modules", []):
+      for cls in callables_from_module(path).values():
+        if inherits_from(cls, Style):
+          STYLES[cls.get_name()] = cls
     
-    for mod_group, modifiers in MODIFIERS_NAMES.items():
-      logger.log_info(f"{mod_group} modifiers found: [{len(modifiers)} with names].")
+    logger.log_info("{} total styles found.".format(len(STYLES)))
+  
+    variables = all_from_module(settings.TECHNIQUES_MODULE)
+    for path in variables.get("modules", []):
+      for cls in callables_from_module(path).values():
+        if inherits_from(cls, Technique):
+          cls.style = os.path.basename(path)[:-3].replace("_", " ")
+          TECHNIQUES[cls.get_name()] = cls
+
+    
+    logger.log_info("{} total techniques found.".format(len(TECHNIQUES)))
+  
 
 
 def at_server_start():

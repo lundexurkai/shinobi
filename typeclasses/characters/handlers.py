@@ -1,24 +1,6 @@
 """
 """
 
-from shinobi.modifiers.modifierhandler import ModifierListHandler
-
-
-class TraitHandler(ModifierListHandler):
-
-  def __init__(self, obj) -> None:
-    super().__init__(obj, attr_name="traits", group="Traits", save_by_id=False)
-  
-  def add(self, flag: int | str, strict=False, quiet=False):
-    if (trait := super().add(flag, strict)):
-      if not quiet:
-        self.obj.msg(f"Trait has been added: {trait.get_name()}")
-
-  def remove(self, flag: int | str, strict=False, quiet=False):
-    if (trait := super().remove(flag, strict)):
-      if not quiet:
-        self.obj.msg(f"Trait has been removed: {trait.get_name()}")
-
 
 class PromptHandler:
 

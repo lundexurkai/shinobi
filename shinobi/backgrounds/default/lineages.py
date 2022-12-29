@@ -13,7 +13,7 @@ class AsurasLinege(Background):
   traits = ("bloodline", )
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 20}),
   }
   
@@ -28,7 +28,7 @@ class IndrasLinege(Background):
   traits = ("bloodline", )
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 20}),
   }
   
@@ -43,7 +43,7 @@ class HamurasLinege(Background):
   traits = ("bloodline", )
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 20}),
   }
   
@@ -58,7 +58,7 @@ class KaguyasLinege(Background):
   traits = ("bloodline", )
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 20}),
   }
   

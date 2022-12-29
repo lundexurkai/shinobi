@@ -10,10 +10,10 @@ class AburameHeritage(Background):
 
   name = "Aburame Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 10}),
   }
 
@@ -24,10 +24,10 @@ class AkimichiHeritage(Background):
 
   name = "Akimichi Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 10}),
   }
 
@@ -38,12 +38,12 @@ class HyuugaHeritage(Background):
 
   name = "Hyuuga Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "backgrounds": (True, ("hamura's lineage", )),
+    "backgrounds": (True, ["hamura's lineage"]),
     "stats": (True, {"cp": 10}),
-    "blocked_traits": ("clan", "orphan")
+    "blocked_traits": (False, ["clan", "orphan"])
   }
 
 class InuzukaHeritage(Background):
@@ -53,10 +53,10 @@ class InuzukaHeritage(Background):
 
   name = "Inuzuka Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 10}),
   }
 
@@ -67,12 +67,12 @@ class KaguyaHeritage(Background):
 
   name = "Kaguya Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "backgrounds": (True, ("kaguya's lineage", )),
+    "backgrounds": (True, ["kaguya's lineage"]),
     "stats": (True, {"cp": 10}),
-    "blocked_traits": ("clan", "orphan")
+    "blocked_traits": (False, ["clan", "orphan"])
   }
 
 class NaraHeritage(Background):
@@ -82,10 +82,10 @@ class NaraHeritage(Background):
 
   name = "Nara Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 10}),
   }
 
@@ -97,12 +97,12 @@ class SenjuHeritage(Background):
 
   name = "Senju Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "backgrounds": (True, ("asura's lineage", )),
+    "backgrounds": (True, ["asura's lineage"]),
     "stats": (True, {"cp": 10}),
-    "blocked_traits": ("clan", "orphan")
+    "blocked_traits": (False, ["clan", "orphan"])
   }
 
 class UzumakiHeritage(Background):
@@ -112,12 +112,12 @@ class UzumakiHeritage(Background):
 
   name = "Uzumaki Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "backgrounds": (True, ("asura's lineage", )),
+    "backgrounds": (True, ["asura's lineage"]),
     "stats": (True, {"cp": 10}),
-    "blocked_traits": ("clan", "orphan")
+    "blocked_traits": (False, ["clan", "orphan"])
   }
 
 class UchihaHeritage(Background):
@@ -127,12 +127,12 @@ class UchihaHeritage(Background):
 
   name = "Uchiha Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "backgrounds": (True, ("indra's lineage", )),
+    "backgrounds": (True, ["indra's lineage"]),
     "stats": (True, {"cp": 10}),
-    "blocked_traits": ("clan", "orphan")
+    "blocked_traits": (False, ["clan", "orphan"])
   }
 
 class YamanakaHeritage(Background):
@@ -142,10 +142,10 @@ class YamanakaHeritage(Background):
 
   name = "Yamanaka Heritage"
   category = Background.Category.Heritage
-  traits = ("clan", )
+  traits = ["clan"]
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "orphan"),
+    "blocked_traits": (False, ["bloodline", "orphan"]),
     "stats": (True, {"cp": 10}),
   }
 
@@ -157,8 +157,8 @@ class OrphanedHeritage(Background):
 
   name = "Orphaned Heritage"
   category = Background.Category.Heritage
-  traits = ("orphan", )
+  traits = ["orphan"]
   
   prerequisities = {
-    "blocked_traits": ("bloodline", "clan"),
+    "blocked_traits": (False, ["bloodline", "clan"]),
   }

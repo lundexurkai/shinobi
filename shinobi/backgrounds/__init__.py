@@ -23,17 +23,17 @@ def get_all_backgrounds(category: Background.Category=None) -> dict[str, Type[Ba
   else:
     return dict(BACKGROUNDS)
 
-def get_available_backgrounds(char: Character, category: Background.Category=None) -> dict[str, Type[Background]]:
+def get_available_backgrounds(character: Character, category: Background.Category=None) -> dict[str, Type[Background]]:
   "Gets all backgrounds with prerequisities met with an optional category sorter."
 
-  backgrounds = get_all_backgrounds(category)
-  results: dict[str, Type[Background]] = {}
+  all_backgrounds = get_all_backgrounds(category)
+  available_backgrounds: dict[str, Type[Background]] = {}
 
-  for background_name, background in backgrounds.items():
-    if not char.backgrounds.has(background_name) and background.check_prerequisities(char, quiet=True):
-      results[background_name] = background
+  for background_name, background in all_backgrounds.items():
+    if not character.backgrounds.has(background_name) and background.check_prerequisities(character, quiet=True):
+      available_backgrounds[background_name] = background
   
-  return results
+  return available_backgrounds
 
 def find_background(background_name: str) -> Type[Background] | None:
   if (background := BACKGROUNDS.get(background_name)):
